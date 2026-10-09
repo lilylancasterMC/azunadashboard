@@ -1,0 +1,1535 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azuna Fresh: Market Intelligence</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#EDEAE2;
+    --surface:#F8F6F1;
+    --surface-2:#F1EEE6;
+    --ink:#22201C;
+    --ink-muted:#5B564C;
+    --ink-faint:#8B8579;
+    --line:#D8D3C6;
+    --line-strong:#C3BCAA;
+    --accent-mass:#0A8D75;
+    --accent-specialty:#AD7A22;
+    --accent-home:#9C4E75;
+    --div-pos:#3F7D3A;
+    --div-neg:#7C3350;
+    --div-mid:#ADA695;
+    --azuna:#2A78D6;
+    --febreze:#C96A2E;
+    --lysol:#1F8F63;
+    --bbw:#B8860B;
+    --mrsmeyers:#C2577E;
+    --good:#2E7D32;
+    --bad:#A13A3A;
+    --shadow: 0 1px 2px rgba(34,32,28,0.06), 0 6px 20px -8px rgba(34,32,28,0.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1B1916;
+      --surface:#221F19;
+      --surface-2:#2A2620;
+      --ink:#EDE9DF;
+      --ink-muted:#B4AC9B;
+      --ink-faint:#756E60;
+      --line:#3A362C;
+      --line-strong:#4A4536;
+      --accent-mass:#2FA88F;
+      --accent-specialty:#B07E2E;
+      --accent-home:#B96C99;
+      --div-pos:#5FA757;
+      --div-neg:#B15E90;
+      --div-mid:#6B6558;
+      --azuna:#3D74C2;
+      --febreze:#C2672F;
+      --lysol:#1F8F63;
+      --bbw:#A8791E;
+      --mrsmeyers:#C2567F;
+      --good:#5FA757;
+      --bad:#C2567F;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -8px rgba(0,0,0,0.45);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1B1916;
+    --surface:#221F19;
+    --surface-2:#2A2620;
+    --ink:#EDE9DF;
+    --ink-muted:#B4AC9B;
+    --ink-faint:#756E60;
+    --line:#3A362C;
+    --line-strong:#4A4536;
+    --accent-mass:#2FA88F;
+    --accent-specialty:#B07E2E;
+    --accent-home:#B96C99;
+    --div-pos:#5FA757;
+    --div-neg:#B15E90;
+    --div-mid:#6B6558;
+    --azuna:#3D74C2;
+    --febreze:#C2672F;
+    --lysol:#1F8F63;
+    --bbw:#A8791E;
+    --mrsmeyers:#C2567F;
+    --good:#5FA757;
+    --bad:#C2567F;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -8px rgba(0,0,0,0.45);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{
+    max-width:980px;
+    margin-inline:auto;
+    padding-inline:clamp(20px,5vw,48px);
+  }
+  em{ font-style:italic; color:var(--ink); }
+  strong{ font-weight:600; }
+
+  /* ---------- Top bar / tab nav ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:40;
+    background:color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid var(--line-strong);
+  }
+  .topbar-inner{
+    max-width:980px; margin-inline:auto;
+    padding:16px clamp(20px,5vw,48px) 0;
+  }
+  .brand-row{
+    display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    margin-bottom:14px;
+  }
+  .brand-name{
+    font-family:"Fraunces", Georgia, serif;
+    font-weight:600;
+    font-size:21px;
+    letter-spacing:-0.01em;
+  }
+  .brand-sub{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  .tabs{
+    display:flex; gap:4px; flex-wrap:wrap;
+    margin-bottom:0;
+  }
+  .tab-btn{
+    appearance:none; border:none; background:none; cursor:pointer;
+    font-family:"IBM Plex Sans", sans-serif;
+    font-size:13.5px; font-weight:500;
+    color:var(--ink-muted);
+    padding:10px 14px 12px;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+  }
+  .tab-btn:hover{ color:var(--ink); }
+  .tab-btn.active{
+    color:var(--ink);
+    border-bottom-color:var(--azuna);
+  }
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; }
+
+  /* ---------- Cover ---------- */
+  .cover{
+    padding-block: clamp(32px,6vw,56px) 24px;
+    position:relative;
+  }
+  .cover::before{
+    content:"";
+    position:absolute;
+    top:-40px; right:-10%;
+    width:420px; height:420px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--azuna) 20%, transparent) 0%, transparent 68%);
+    pointer-events:none;
+    z-index:0;
+  }
+  .cover > *{ position:relative; z-index:1; }
+  .eyebrow{
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:11.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ink-muted);
+    margin:0 0 18px;
+  }
+  .title{
+    font-family:"Fraunces", Georgia, serif;
+    font-weight:600;
+    font-size:clamp(38px,7vw,62px);
+    line-height:1.0;
+    letter-spacing:-0.01em;
+    margin:0 0 16px;
+    text-wrap:balance;
+  }
+  .subtitle{
+    font-family:"Fraunces", Georgia, serif;
+    font-weight:300;
+    font-style:italic;
+    font-size:clamp(18px,2.4vw,22px);
+    color:var(--ink-muted);
+    max-width:36em;
+    margin:0 0 28px;
+    text-wrap:balance;
+  }
+  .meta-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px 30px;
+    border-top:1px solid var(--line-strong);
+    padding-top:14px;
+  }
+  .meta-item{ display:flex; flex-direction:column; gap:3px; }
+  .meta-k{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:10.5px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  .meta-v{ font-size:14px; font-weight:500; }
+
+  .flag{
+    display:inline-flex; align-items:center; gap:8px;
+    background: color-mix(in srgb, var(--accent-specialty) 16%, var(--surface));
+    color: var(--ink);
+    font-size: 12.5px;
+    font-weight: 500;
+    padding: 8px 13px;
+    border-radius: 7px;
+    margin-top: 16px;
+    max-width: fit-content;
+    border:1px solid color-mix(in srgb, var(--accent-specialty) 35%, transparent);
+  }
+
+  /* ---------- Sections ---------- */
+  .section{ padding-block:36px; border-top:1px solid var(--line); }
+  .section-eyebrow{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.13em;
+    text-transform:uppercase;
+    color:var(--azuna);
+    margin:0 0 10px;
+  }
+  .section-title{
+    font-family:"Fraunces", Georgia, serif;
+    font-weight:600;
+    font-size:clamp(24px,3.6vw,32px);
+    line-height:1.14;
+    margin:0 0 16px;
+    text-wrap:balance;
+    max-width:22em;
+  }
+  .lede{
+    font-size:16px;
+    color:var(--ink);
+    max-width:64ch;
+    margin:0 0 20px;
+  }
+  .lede:last-child{ margin-bottom:0; }
+  .chart-footnote{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11.5px;
+    color:var(--ink-faint);
+    margin:14px 0 0;
+    line-height:1.5;
+  }
+
+  /* ---------- Chart card shell ---------- */
+  .chart-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:22px clamp(16px,3vw,26px) 18px;
+    box-shadow:var(--shadow);
+    margin:0 0 20px;
+  }
+  .chart-title{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin:0 0 12px;
+  }
+
+  /* ---------- Legend ---------- */
+  .legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 20px;
+    margin-bottom:16px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:12.5px;
+    color:var(--ink-muted);
+    font-weight:500;
+  }
+  .swatch{
+    width:9px; height:9px;
+    border-radius:2px;
+    background:var(--c, var(--accent-mass));
+    flex-shrink:0;
+  }
+  .swatch.line{ width:14px; height:3px; border-radius:2px; }
+  .swatch.round{ border-radius:50%; }
+
+  /* ---------- Ranked bar list ---------- */
+  .bar-list{ display:flex; flex-direction:column; }
+  .bar-row{
+    display:grid;
+    grid-template-columns: 150px 1fr 78px;
+    align-items:center;
+    gap:12px;
+    padding-block:7px;
+    border-bottom:1px solid var(--line);
+    cursor:default;
+  }
+  .bar-row:last-child{ border-bottom:none; }
+  .bar-name{ font-size:13.5px; font-weight:500; }
+  .bar-track{
+    position:relative;
+    height:16px;
+    background:
+      linear-gradient(to right, transparent 24.9%, var(--line) 25%, var(--line) calc(25% + 1px), transparent calc(25% + 1px)),
+      linear-gradient(to right, transparent 49.9%, var(--line) 50%, var(--line) calc(50% + 1px), transparent calc(50% + 1px)),
+      linear-gradient(to right, transparent 74.9%, var(--line) 75%, var(--line) calc(75% + 1px), transparent calc(75% + 1px));
+    border-radius:3px;
+  }
+  .bar-fill{
+    position:absolute; left:0; top:0; bottom:0;
+    border-radius:3px;
+    background:var(--c, var(--accent-mass));
+    transition:filter .15s ease;
+  }
+  .bar-row:hover .bar-fill{ filter:brightness(1.08); }
+  .bar-val{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:12.5px;
+    font-variant-numeric:tabular-nums;
+    text-align:right;
+    color:var(--ink-muted);
+    white-space:nowrap;
+  }
+  .bar-val .rep{ color:var(--ink-faint); font-size:11px; display:block; margin-top:1px;}
+  .axis-labels{
+    display:grid;
+    grid-template-columns: 150px 1fr 78px;
+    gap:12px;
+    margin-top:6px;
+  }
+  .axis-labels .ticks{
+    display:flex; justify-content:space-between;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:10.5px;
+    color:var(--ink-faint);
+  }
+
+  /* ---------- Profile grid / mini charts ---------- */
+  .profile-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:22px;
+    margin-bottom:6px;
+  }
+  .profile-col{
+    flex:1 1 280px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:20px 20px 16px;
+    box-shadow:var(--shadow);
+  }
+  .profile-col-header{
+    display:flex; align-items:center; gap:8px;
+    font-family:"Fraunces", Georgia, serif;
+    font-weight:600;
+    font-size:16.5px;
+    margin-bottom:14px;
+  }
+  .profile-col-header .swatch{ width:11px; height:11px; border-radius:3px; }
+  .mini-chart{ margin-bottom:16px; }
+  .mini-chart:last-child{ margin-bottom:0; }
+  .mini-chart-title{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:10.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin:0 0 8px;
+  }
+  .mini-row{
+    display:grid;
+    grid-template-columns: 64px 1fr 40px;
+    align-items:center;
+    gap:8px;
+    padding-block:3px;
+  }
+  .mini-label{ font-size:11.5px; color:var(--ink-muted); }
+  .mini-track{
+    position:relative; height:10px;
+    background:var(--surface-2);
+    border-radius:2px;
+  }
+  .mini-fill{
+    position:absolute; left:0; top:0; bottom:0;
+    border-radius:2px;
+    background:var(--c, var(--accent-mass));
+  }
+  .mini-val{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    font-variant-numeric:tabular-nums;
+    color:var(--ink-muted);
+    text-align:right;
+  }
+
+  /* ---------- Callout / recommendation ---------- */
+  .callout{
+    background:var(--surface);
+    border:1px solid var(--line-strong);
+    border-radius:12px;
+    padding:clamp(18px,3vw,28px);
+    box-shadow:var(--shadow);
+    margin-bottom:20px;
+  }
+  .callout-head{ display:flex; align-items:baseline; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+  .callout-tag{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:#fff;
+    background:var(--azuna);
+    padding:3px 9px;
+    border-radius:999px;
+  }
+  .callout-name{
+    font-family:"Fraunces", Georgia, serif;
+    font-weight:600;
+    font-size:clamp(22px,3.6vw,28px);
+  }
+  .callout p{ font-size:15px; max-width:64ch; margin:0 0 16px; }
+  .callout p:last-of-type{ margin-bottom:0; }
+  .callout ul{ margin:10px 0 0; padding-left:20px; font-size:14.5px; }
+  .callout li{ margin-bottom:7px; }
+  .callout li:last-child{ margin-bottom:0; }
+
+  .stat-compare{ display:flex; flex-direction:column; gap:14px; }
+  .stat-row{ display:flex; flex-direction:column; gap:6px; }
+  .stat-row-label{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  .stat-pair{ display:flex; flex-direction:column; gap:4px; }
+  .stat-line{ display:grid; grid-template-columns:112px 1fr 56px; align-items:center; gap:10px; }
+  .stat-line .nm{ font-size:12px; font-weight:500; color:var(--ink-muted); }
+  .stat-track{ position:relative; height:9px; background:var(--surface-2); border-radius:2px; }
+  .stat-fill{ position:absolute; left:0; top:0; bottom:0; border-radius:2px; background:var(--c); }
+  .stat-line .vv{ font-family:"IBM Plex Mono", monospace; font-size:11.5px; text-align:right; color:var(--ink-muted); font-variant-numeric:tabular-nums;}
+
+  /* ---------- Diverging Likert chart ---------- */
+  .divergent-card{ padding-top:2px; }
+  .divergent-row{ margin-bottom:22px; }
+  .divergent-row:last-child{ margin-bottom:8px; }
+  .divergent-q{ font-size:13px; font-weight:500; margin-bottom:8px; }
+  .divergent-track{
+    position:relative;
+    height:34px;
+    background:var(--surface-2);
+    border-radius:4px;
+    overflow:visible;
+  }
+  .divergent-center{
+    position:absolute; top:-4px; bottom:-4px; left:50%;
+    width:1px; background:var(--line-strong);
+  }
+  .divergent-seg{
+    position:absolute; top:0; bottom:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .divergent-seg span{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    color:#fff;
+    white-space:nowrap;
+  }
+  .divergent-axis{
+    display:flex; justify-content:space-between;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:10.5px;
+    color:var(--ink-faint);
+    margin-top:8px;
+  }
+
+  /* ---------- Signed horizontal bars (brand competitive set) ---------- */
+  .sbar-block{ margin-bottom:22px; }
+  .sbar-block:last-child{ margin-bottom:4px; }
+  .sbar-title{ font-size:13px; font-weight:600; margin-bottom:10px; }
+  .sbar-row{ display:flex; align-items:center; gap:10px; height:30px; cursor:default; }
+  .sbar-label{ width:124px; flex:none; font-size:12px; color:var(--ink-muted); text-align:right; }
+  .sbar-label.hero{ color:var(--ink); font-weight:600; }
+  .sbar-track{ position:relative; flex:1; height:16px; }
+  .sbar-zero{ position:absolute; top:-6px; bottom:-6px; left:50%; width:1px; background:var(--line-strong); }
+  .sbar-zero.full{ left:0; }
+  .sbar-fill{ position:absolute; top:0; bottom:0; border-radius:3px; }
+  .sbar-val{ width:54px; flex:none; font-family:"IBM Plex Mono", monospace; font-size:11.5px; color:var(--ink-muted); font-variant-numeric:tabular-nums; }
+
+  /* ---------- Stat tiles ---------- */
+  .tile-grid{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:14px; margin-bottom:6px; }
+  @media (max-width:720px){ .tile-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  .stat-tile{
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    padding:16px 16px 14px; box-shadow:var(--shadow);
+    display:flex; flex-direction:column; gap:5px;
+  }
+  .stat-tile.hero{ border-color:var(--azuna); background:color-mix(in srgb, var(--azuna) 10%, var(--surface)); }
+  .stat-label{ font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-faint); font-weight:500; }
+  .stat-value{ font-family:"IBM Plex Mono", monospace; font-size:26px; font-weight:600; font-variant-numeric:tabular-nums; line-height:1.05; }
+  .stat-value.pos{ color:var(--good); }
+  .stat-value.neg{ color:var(--bad); }
+  .stat-n{ font-size:11px; color:var(--ink-faint); font-family:"IBM Plex Mono", monospace; }
+  .stat-n.low{ color:var(--accent-specialty); }
+
+  /* ---------- Line trend chart (SVG) ---------- */
+  .line-chart svg{ width:100%; height:auto; overflow:visible; }
+  .line-chart text{ font-family:"IBM Plex Sans", sans-serif; }
+  .lc-axis{ fill:var(--ink-faint); font-size:10.5px; }
+  .lc-grid{ stroke:var(--line); stroke-width:1; }
+  .lc-zero{ stroke:var(--line-strong); stroke-width:1.2; }
+
+  /* ---------- Spend cards ---------- */
+  .spend-grid{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:18px; }
+  @media (max-width:720px){ .spend-grid{ grid-template-columns:1fr; } }
+  .spend-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    box-shadow:var(--shadow); padding:18px 20px 16px;
+  }
+  .spend-card-title{ font-size:14px; font-weight:600; margin-bottom:10px; }
+  .spend-figures{ display:flex; align-items:flex-end; justify-content:space-between; gap:14px; margin-bottom:10px; flex-wrap:wrap; }
+  .spend-value{ font-family:"Fraunces", Georgia, serif; font-size:30px; font-weight:500; color:var(--ink); }
+  .spend-compare{ font-size:11.5px; color:var(--ink-faint); margin-top:2px; max-width:22em; }
+  .spend-deltas{ display:flex; gap:18px; flex-wrap:wrap; }
+  .spend-delta{ display:flex; flex-direction:column; gap:1px; }
+  .spend-delta .dv{ font-size:16px; font-weight:700; font-family:"IBM Plex Mono", monospace; }
+  .spend-delta .dv.pos{ color:var(--good); }
+  .spend-delta .dv.neg{ color:var(--bad); }
+  .spend-delta .dl{ font-size:11px; color:var(--ink-faint); }
+  .spend-bar-compare{ margin-top:12px; }
+
+  /* ---------- Insight list (callout-style takeaway grid) ---------- */
+  .insight-grid{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:18px; margin-top:4px; }
+  @media (max-width:720px){ .insight-grid{ grid-template-columns:1fr; } }
+  .insight{ display:flex; flex-direction:column; gap:4px; }
+  .insight-head{ font-size:13px; font-weight:700; }
+  .insight p{ font-size:13.5px; color:var(--ink); margin:0; }
+
+  /* ---------- Pullquote ---------- */
+  .pullquote-section{ padding-block:48px; }
+  .pullquote{
+    font-family:"Fraunces", Georgia, serif;
+    font-weight:500;
+    font-style:italic;
+    font-size:clamp(22px,3.6vw,30px);
+    line-height:1.32;
+    color:var(--ink);
+    max-width:26em;
+    text-wrap:balance;
+    margin:0;
+  }
+
+  /* ---------- Footer ---------- */
+  .footer{
+    border-top:1px solid var(--line-strong);
+    padding-block:26px 48px;
+  }
+  .footer p{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11.5px;
+    line-height:1.7;
+    color:var(--ink-faint);
+    max-width:72ch;
+    margin:0 0 8px;
+  }
+  .footer p:last-child{ margin-bottom:0; }
+
+  /* ---------- Tooltip ---------- */
+  #tooltip{
+    position:fixed;
+    pointer-events:none;
+    background:var(--ink);
+    color:var(--bg);
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11.5px;
+    padding:6px 10px;
+    border-radius:6px;
+    line-height:1.4;
+    box-shadow:0 6px 18px -6px rgba(0,0,0,0.4);
+    opacity:0;
+    transform:translate(-50%,-100%);
+    transition:opacity .1s ease;
+    z-index:50;
+    white-space:nowrap;
+  }
+  #tooltip.show{ opacity:1; }
+  #tooltip b{ color:var(--bg); }
+
+  @media (max-width:560px){
+    .bar-row{ grid-template-columns: 96px 1fr 62px; }
+    .axis-labels{ grid-template-columns: 96px 1fr 62px; }
+    .bar-name{ font-size:12px; }
+    .mini-row{ grid-template-columns:54px 1fr 34px; }
+    .stat-line{ grid-template-columns:88px 1fr 44px; }
+    .sbar-label{ width:84px; font-size:11px; }
+    .tile-grid{ grid-template-columns:1fr 1fr; }
+  }
+
+  :focus-visible{ outline:2px solid var(--azuna); outline-offset:2px; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand-row">
+      <div class="brand-name">Azuna Fresh</div>
+      <div class="brand-sub">Morning Consult &middot; US Market Intelligence</div>
+    </div>
+    <nav class="tabs" id="tab-nav">
+      <button class="tab-btn active" data-tab="funnel">Brand Funnel</button>
+      <button class="tab-btn" data-tab="retail">Retail Strategy</button>
+      <button class="tab-btn" data-tab="consumer">Core Consumer &amp; Spending</button>
+      <button class="tab-btn" data-tab="economic">Economic Sentiment</button>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ================= TAB 1 : BRAND FUNNEL (landing) ================= -->
+  <section class="tab-panel active" id="tab-funnel">
+
+    <header class="cover">
+      <p class="eyebrow">Morning Consult &middot; Daily Tracker &middot; United States</p>
+      <h1 class="title">Brand Funnel</h1>
+      <p class="subtitle">Azuna's brand health, competitive standing, and where to point marketing spend &mdash; against the four brands it competes with for shelf and search attention.</p>
+      <div class="meta-row">
+        <div class="meta-item"><span class="meta-k">Competitive set</span><span class="meta-v">Febreze &middot; Lysol &middot; Bath &amp; Body Works &middot; Mrs. Meyer's</span></div>
+        <div class="meta-item"><span class="meta-k">Azuna sample</span><span class="meta-v">n=619 (Sept 12&ndash;15, 2026)</span></div>
+        <div class="meta-item"><span class="meta-k">Data source</span><span class="meta-v">MC Daily Tracker</span></div>
+      </div>
+      <div class="flag">&#9888; Azuna was only recently added to the Daily Tracker &mdash; figures below are a single-wave snapshot, not yet a trend. Sub-metrics with small bases (NPS: n=45) are directional.</div>
+    </header>
+
+    <section class="section" id="funnel-health">
+      <p class="section-eyebrow">Brand Health</p>
+      <h2 class="section-title">Azuna's numbers, this wave</h2>
+      <p class="lede">All seven core Daily Tracker brand measures for Azuna among US adults. Awareness is a simple share; everything else is a net score (positive minus negative).</p>
+      <div class="tile-grid" id="health-tiles"></div>
+    </section>
+
+    <section class="section" id="funnel-competitive">
+      <p class="section-eyebrow">Competitive Set</p>
+      <h2 class="section-title">How Azuna stacks up against the category</h2>
+      <p class="lede">Same four measures, latest available wave per brand. Azuna trails on reach &mdash; expected for a brand this new to tracking &mdash; and sits closest to Mrs. Meyer's, its nearest natural-positioning peer, on sentiment.</p>
+      <div class="chart-card">
+        <div class="legend" id="brand-legend"></div>
+        <div id="competitive-bars"></div>
+      </div>
+    </section>
+
+    <section class="section" id="funnel-trend">
+      <p class="section-eyebrow">Twelve-Month Trend</p>
+      <h2 class="section-title">A steady category &mdash; Azuna enters mid-pack</h2>
+      <p class="lede">Monthly Net Favorability and Net Purchasing Consideration for the four incumbents, Sept 2025&ndash;Sept 2026. Azuna's single Sept 2026 reading is plotted as a reference point, not a trend line.</p>
+      <div class="chart-card">
+        <div class="legend" id="trend-legend"></div>
+        <div class="chart-title">Net Favorability</div>
+        <div class="line-chart" id="fav-trend"></div>
+        <div class="chart-title" style="margin-top:20px">Net Purchasing Consideration</div>
+        <div class="line-chart" id="pc-trend"></div>
+      </div>
+    </section>
+
+    <section class="section" id="funnel-discovery">
+      <p class="section-eyebrow">New Product Discovery</p>
+      <h2 class="section-title">Where US adults find new brands</h2>
+      <p class="lede">Share of US adults who say each channel is typically how they find out about new brands and products (multi-select; n=22,546). Search and word-of-mouth lead by a wide margin.</p>
+      <div class="chart-card">
+        <div class="bar-list" id="discovery-chart"></div>
+      </div>
+    </section>
+
+    <section class="section" id="funnel-targeting">
+      <p class="section-eyebrow">Where To Point Marketing Spend</p>
+      <h2 class="section-title">Azuna's sentiment by audience segment</h2>
+      <p class="lede">Net Favorability and Net Purchasing Consideration among Azuna-aware respondents, by age and household income. Bars right of zero are net-positive segments &mdash; where new spend should work hardest.</p>
+      <div class="profile-grid">
+        <div class="profile-col">
+          <div class="profile-col-header">By age group</div>
+          <div id="age-chart"></div>
+        </div>
+        <div class="profile-col">
+          <div class="profile-col-header">By household income</div>
+          <div id="income-chart"></div>
+          <p class="chart-footnote" style="margin-top:10px">* small base (n&lt;30) &mdash; directional only</p>
+        </div>
+      </div>
+      <div class="callout" style="margin-top:4px">
+        <p><strong>Reading the two together:</strong> Azuna over-indexes positive among 18&ndash;34s (the largest, most reliably sampled favorable segment) and, directionally, 45&ndash;54s. Net sentiment turns negative for 35&ndash;44 and 55&ndash;64 respondents. On income, the clearest positive pocket is $35k&ndash;$50k households &mdash; a value-conscious segment that fits a premium-but-approachable natural product. Bands above $150k are too thin this wave (n&lt;30) to act on.</p>
+        <ul>
+          <li><strong>Prioritize:</strong> adults 18&ndash;34, secondarily 45&ndash;54; household income roughly $35k&ndash;$100k.</li>
+          <li><strong>Lead channels:</strong> search (65.6%) and word-of-mouth (64.6%) are the two biggest doors into the category &mdash; invest in search visibility and a review/referral push before heavier media.</li>
+          <li><strong>Watch:</strong> Net Value is currently negative (&minus;2.1) and NPS is low on a thin base (n=45) &mdash; creative and offer should lead with value-for-price before broad awareness spend.</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Source: Morning Consult Daily Tracker, United States, brand-perception questions (Favorability, Purchasing Consideration, Net Promoter Score, Trust, Value, Buzz, Awareness) and the New Brand Discovery battery. Azuna reflects the wave collected Sept 12&ndash;15, 2026 (total weighted n=619; NPS n=45, Net Value n=421 &mdash; interpret low-n cells with caution). Competitor figures reflect each brand's latest available wave; trend series spans Sept 2025&ndash;Sept 2026. Age/income breakdowns are among Azuna-aware respondents this wave; cells below n=30 are flagged and directional only.</p>
+    </footer>
+
+  </section>
+
+  <!-- ================= TAB 2 : RETAIL STRATEGY ================= -->
+  <section class="tab-panel" id="tab-retail">
+
+    <header class="cover">
+      <p class="eyebrow">Morning Consult &middot; Daily Tracker &middot; United States</p>
+      <h1 class="title">Shelf&nbsp;&amp;&nbsp;Scent</h1>
+      <p class="subtitle">Where Azuna Fresh should compete for space on the US home-fragrance shelf &mdash; and who's already standing in the aisle.</p>
+      <div class="meta-row">
+        <div class="meta-item"><span class="meta-k">Market</span><span class="meta-v">United States</span></div>
+        <div class="meta-item"><span class="meta-k">Data source</span><span class="meta-v">MC Daily Tracker</span></div>
+        <div class="meta-item"><span class="meta-k">Updated</span><span class="meta-v">September 2026</span></div>
+      </div>
+    </header>
+
+    <section class="section" id="landscape">
+      <p class="section-eyebrow">Retail Landscape</p>
+      <h2 class="section-title">Ten stores, three kinds of shelf</h2>
+      <p class="lede">Morning Consult doesn't ask shoppers directly where they buy candles, so this ranks the retailers most tied to the category by <em>usage frequency</em> &mdash; the share of US adults who buy from that retailer at any cadence. It's a reach proxy, not a category-specific share, but it's the clearest read on who reliably gets foot traffic.</p>
+      <div class="chart-card">
+        <div class="legend" id="landscape-legend"></div>
+        <div class="bar-list" id="landscape-chart"></div>
+        <div class="axis-labels"><div></div><div class="ticks"><span>0</span><span>25</span><span>50</span><span>75</span><span>100%</span></div><div></div></div>
+        <p class="chart-footnote">Usage frequency = any purchase cadence, US adults. Rep. = Morning Consult Reputation Score (0&ndash;100), shown where tracked. Daily Tracker, rolling Sept 2022&ndash;Sept 2026.</p>
+      </div>
+      <p class="lede">Bath &amp; Body Works is the tell: a single-category fragrance retailer out-drawing every off-price home chain and beauty specialist in the set. The T.J. Maxx / Marshalls / HomeGoods trio behaves like one ecosystem &mdash; reliable candle real estate, just at lower individual reach than the specialists above them.</p>
+    </section>
+
+    <section class="section" id="profiles">
+      <p class="section-eyebrow">Shopper Profiles</p>
+      <h2 class="section-title">Two very different regulars</h2>
+      <p class="lede">Target and Bath &amp; Body Works post nearly identical Reputation Scores but pull shoppers from opposite ends of the demographic map. Reading the two side by side is the fastest way to see whose shelf Azuna Fresh actually fits.</p>
+      <div class="profile-grid">
+        <div class="profile-col">
+          <div class="profile-col-header"><span class="swatch" style="--c:var(--accent-mass)"></span>Target</div>
+          <div class="mini-chart"><p class="mini-chart-title">Household income</p><div id="target-income"></div></div>
+          <div class="mini-chart"><p class="mini-chart-title">Age</p><div id="target-age"></div></div>
+          <div class="mini-chart"><p class="mini-chart-title">Gender</p><div id="target-gender"></div></div>
+        </div>
+        <div class="profile-col">
+          <div class="profile-col-header"><span class="swatch" style="--c:var(--accent-specialty)"></span>Bath &amp; Body Works</div>
+          <div class="mini-chart"><p class="mini-chart-title">Household income</p><div id="bbw-income"></div></div>
+          <div class="mini-chart"><p class="mini-chart-title">Age</p><div id="bbw-age"></div></div>
+          <div class="mini-chart"><p class="mini-chart-title">Gender</p><div id="bbw-gender"></div></div>
+        </div>
+      </div>
+      <p class="lede">Target usage climbs steadily with income &mdash; 54% under $20k to 78&ndash;82% above $100k &mdash; and skews toward 18&ndash;44 year-olds, with usage barely differing by gender. Bath &amp; Body Works is nearly flat across income (47&ndash;56% in every bracket &mdash; a genuinely mass-affordable habit), skews younger still, and is sharply female: 60% of women versus 42% of men. That's the clearest home-scent shopper template in the data; Target is the higher-income, broader-reach store already selling to a version of that same shopper.</p>
+    </section>
+
+    <section class="section" id="recommendation">
+      <p class="section-eyebrow">The Recommendation</p>
+      <h2 class="section-title">Lead with Target. Bench the TJX cluster for later.</h2>
+      <div class="callout">
+        <div class="callout-head">
+          <span class="callout-tag">Primary channel</span>
+          <span class="callout-name">Target</span>
+        </div>
+        <p>Target reaches a higher-income, younger, design-forward shopper at real scale &mdash; the buyer who can absorb an emerging premium price point instead of defaulting to the cheapest candle on the shelf. Its own merchandising posture (rotating collaborations, a running appetite for newness in home and beauty) fits an emerging brand better than Walmart's larger but more price-driven base.</p>
+        <div class="stat-compare" id="stat-compare"></div>
+      </div>
+      <p class="lede">Bath &amp; Body Works isn't a realistic wholesale channel &mdash; it overwhelmingly sells its own house brand &mdash; but it's the psychographic template Azuna Fresh should design its Target shelf presence around: young, female-skewing, habitual. The T.J. Maxx / Marshalls / HomeGoods cluster is worth a secondary push once volume matters: the audience is more price-sensitive (HomeGoods carries the group's weakest favorability, at 43.6) but the treasure-hunt format rewards exactly the rotating, small-batch SKUs an emerging brand can supply without a large production run.</p>
+    </section>
+
+    <section class="section" id="sustainability">
+      <p class="section-eyebrow">Sustainability &amp; The Basket</p>
+      <h2 class="section-title">A value, not yet a filter</h2>
+      <p class="lede">57% of US adults say they try to shop sustainably in general. Ask specifically about beauty purchases &mdash; the category closest to home fragrance &mdash; and only 31% call sustainable packaging "very" or "extremely" important. That gap is the headline: sustainability is real, but it isn't yet what decides a beauty or fragrance purchase the way scent, price, or occasion does.</p>
+      <div class="chart-card">
+        <div class="legend" id="divergent-legend"></div>
+        <div class="divergent-card" id="divergent-chart"></div>
+      </div>
+      <p class="lede">Split by who's shopping, the pattern sharpens. Willingness to shop sustainably is highest among 18&ndash;44 year-olds and fades with age, and rises &mdash; unevenly, but rises &mdash; with household income. Both cuts point at the same household Target already over-indexes on.</p>
+      <div class="profile-grid">
+        <div class="profile-col">
+          <div class="profile-col-header"><span class="swatch" style="--c:var(--div-pos)"></span>Agrees, by age</div>
+          <div id="sustain-age"></div>
+        </div>
+        <div class="profile-col">
+          <div class="profile-col-header"><span class="swatch" style="--c:var(--div-pos)"></span>Agrees, by household income</div>
+          <div id="sustain-income"></div>
+        </div>
+      </div>
+      <p class="chart-footnote">"Agrees" = strongly + somewhat agree with "I try to shop sustainably when possible." Figures for the $200k&ndash;$250k and $250k+ bands rest on smaller samples (weighted n &lt; 150) and should be read directionally.</p>
+    </section>
+
+    <section class="section pullquote-section">
+      <p class="pullquote">Lead with scent, design, and newness. Let sustainable packaging be the credibility layer for the under-45, six-figure household &mdash; not the headline.</p>
+    </section>
+
+    <footer class="footer">
+      <p>Source: Morning Consult Daily Tracker (US). Usage, favorability, and Reputation Score figures reflect a rolling September 2022&ndash;September 2026 collection window (brand n &asymp; 85,000&ndash;249,000 weighted respondents). Sustainability items reflect the most recent 2026 fielding (n &asymp; 5,500&ndash;5,900 weighted respondents).</p>
+    </footer>
+
+  </section>
+
+  <!-- ================= TAB 3 : CORE CONSUMER & SPENDING ================= -->
+  <section class="tab-panel" id="tab-consumer">
+
+    <header class="cover">
+      <p class="eyebrow">Morning Consult &middot; Consumer Spending Tracker &middot; United States</p>
+      <h1 class="title">Core Consumer</h1>
+      <p class="subtitle">A proxy audience built from Azuna's user profile spends more than twice the average household &mdash; and dipped slightly in the latest month.</p>
+      <div class="meta-row">
+        <div class="meta-item"><span class="meta-k">The audience</span><span class="meta-v">Parents/guardians, 18&ndash;44, HHI $100k+</span></div>
+        <div class="meta-item"><span class="meta-k">Window</span><span class="meta-v">Oct 2025&ndash;Aug 2026</span></div>
+        <div class="meta-item"><span class="meta-k">Data source</span><span class="meta-v">MC Consumer Spending Tracker</span></div>
+      </div>
+      <div class="flag">&#9888; This is a proxy audience built to match Azuna's known user base, not a stand-in for Azuna buyers themselves. Monthly base: 309&ndash;443 respondents.</div>
+    </header>
+
+    <section class="section" id="consumer-profile">
+      <p class="section-eyebrow">Why This Profile</p>
+      <h2 class="section-title">Built from who Azuna's users actually are</h2>
+      <p class="lede">Among Azuna users, 78% are Millennials or Gen Z (versus 45% of all adults), 62% have kids at home (versus 28%), and 29% earn $100k or more a year (versus 17%). The spending proxy audience &mdash; parents or guardians of children under 18, aged 18&ndash;44, in households earning $100k+ &mdash; is built to match that profile.</p>
+      <div class="tile-grid" style="grid-template-columns:repeat(3, minmax(0,1fr));">
+        <div class="stat-tile"><div class="stat-label">Millennial / Gen Z</div><div class="stat-value">78%</div><div class="stat-n">vs. 45% of all adults</div></div>
+        <div class="stat-tile"><div class="stat-label">Have kids at home</div><div class="stat-value">62%</div><div class="stat-n">vs. 28% of all adults</div></div>
+        <div class="stat-tile"><div class="stat-label">HHI $100k+</div><div class="stat-value">29%</div><div class="stat-n">vs. 17% of all adults</div></div>
+      </div>
+    </section>
+
+    <section class="section" id="consumer-spending">
+      <p class="section-eyebrow">Household Spending</p>
+      <h2 class="section-title">A premium audience, with a small August dip</h2>
+      <p class="lede">Self-reported average monthly household spend, nominal dollars, not seasonally adjusted. Three reads per category: the full Oct&ndash;Aug change (inflated by a December level shift &mdash; see flag below), the cleaner Jan&ndash;Aug change, and the latest Jul&ndash;Aug move.</p>
+      <div class="spend-grid" id="spend-cards"></div>
+      <p class="chart-footnote">Source: Morning Consult Consumer Spending tracker (&asymp;8,000 adults/month). The step-up from Dec 2025 has not been explained and should be verified before external use; the Oct&ndash;Aug figures above are shown for completeness but Jan&ndash;Aug is the more reliable growth read.</p>
+    </section>
+
+    <section class="section" id="consumer-takeaways">
+      <p class="section-eyebrow">What It Means</p>
+      <h2 class="section-title">Three reads on the core consumer</h2>
+      <div class="insight-grid">
+        <div class="insight"><div class="insight-head">A premium audience</div><p>Total spending is 2.2&times; the average household ($7,858 vs. $3,601), and personal care is 2.2&times; as well ($106 vs. $47).</p></div>
+        <div class="insight"><div class="insight-head">A small, broad dip</div><p>August fell in every category tracked, most in home furnishings. One month, within normal swings &mdash; not (yet) a trend.</p></div>
+        <div class="insight"><div class="insight-head">Read growth from January</div><p>Oct&ndash;Aug growth is inflated by the unexplained December level shift. Jan&ndash;Aug is the cleaner read on real momentum.</p></div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Source: Morning Consult Research Intelligence, U.S. Consumer Spending tracker (about 8,000 adults a month). Self-reported average monthly household spend in nominal dollars, not seasonally adjusted, including households with no spend. Comparison groups: all households (total spending, personal care), all adults 18+ (home furnishings); no comparison group available for groceries. Azuna profile: Daily Tracker, Oct 2022&ndash;Oct 2026, n=335.</p>
+    </footer>
+
+  </section>
+
+  <!-- ================= TAB 4 : ECONOMIC SENTIMENT ================= -->
+  <section class="tab-panel" id="tab-economic">
+
+    <header class="cover">
+      <p class="eyebrow">Morning Consult &middot; Daily Tracker &middot; Index of Consumer Sentiment</p>
+      <h1 class="title">Economic Angle</h1>
+      <p class="subtitle">Azuna's core consumer is running far more economically confident than the national population &mdash; or the shoppers of any retail channel on the table.</p>
+      <div class="meta-row">
+        <div class="meta-item"><span class="meta-k">Metric</span><span class="meta-v">Index of Consumer Sentiment (ICS)</span></div>
+        <div class="meta-item"><span class="meta-k">Window</span><span class="meta-v">Oct 2025&ndash;Sept 2026, monthly</span></div>
+        <div class="meta-item"><span class="meta-k">Data source</span><span class="meta-v">MC Daily Tracker</span></div>
+      </div>
+    </header>
+
+    <section class="section" id="ics-explainer">
+      <p class="section-eyebrow">The Metric</p>
+      <h2 class="section-title">What ICS measures</h2>
+      <p class="lede">Morning Consult's Index of Consumer Sentiment follows the same five-question methodology as the University of Michigan index: current and expected personal finances, 12-month and 5-year business-condition expectations, and current buying conditions for major household purchases, averaged into one score. It's best read as a change-over-time signal within an audience, and more cautiously as an absolute-level comparison across very different audiences &mdash; the gap below is large enough, and this consistent across all twelve months, that it's a real signal rather than noise.</p>
+    </section>
+
+    <section class="section" id="ics-azuna">
+      <p class="section-eyebrow">The Headline Gap</p>
+      <h2 class="section-title">A consumer sentiment reading Azuna rarely has to worry about</h2>
+      <p class="lede">Azuna's core-consumer proxy (parents/guardians 18&ndash;44, HHI $100k+) has posted an ICS of 132&ndash;148 every single month for the past year &mdash; 45 to 60 points above the national reading, which itself slipped from 93.8 to 87.6 over the same period. This lines up with the spending data on the Core Consumer tab: a household spending 2.2&times; the national average is also one that feels considerably more financially secure.</p>
+      <div class="chart-card">
+        <div class="legend" id="ics-azuna-legend"></div>
+        <div class="line-chart" id="ics-azuna-trend"></div>
+        <p class="chart-footnote">Azuna core-consumer proxy: n &asymp; 5,600&ndash;8,100 weighted/month. National: n &asymp; 116,000&ndash;170,000 weighted/month.</p>
+      </div>
+    </section>
+
+    <section class="section" id="ics-retail">
+      <p class="section-eyebrow">Versus The Retail Channels</p>
+      <h2 class="section-title">Target, Walmart, and Bath &amp; Body Works shoppers track the national mood</h2>
+      <p class="lede">Shoppers of the three retailers discussed on the Retail Strategy tab sit much closer to the national trend than Azuna's own core consumer does &mdash; and closer to each other, give or take Bath &amp; Body Works' thinner, noisier sample.</p>
+      <div class="chart-card">
+        <div class="legend" id="ics-retail-legend"></div>
+        <div class="line-chart" id="ics-retail-trend"></div>
+        <p class="chart-footnote">Target shoppers: n &asymp; 4,400&ndash;5,000 weighted/month. Walmart shoppers: n &asymp; 1,900&ndash;4,500 weighted/month. Bath &amp; Body Works shoppers: n &asymp; 320&ndash;475 weighted/month &mdash; smallest base of the group; read month-to-month swings directionally.</p>
+      </div>
+    </section>
+
+    <section class="section" id="ics-table">
+      <p class="section-eyebrow">Latest Reading</p>
+      <h2 class="section-title">September 2026 snapshot</h2>
+      <div class="chart-card">
+        <div id="ics-snapshot"></div>
+      </div>
+      <div class="callout">
+        <p><strong>What this means for Azuna:</strong> the core consumer Azuna is built around is not economically stretched the way the average shopper &mdash; at Target, Walmart, or even Bath &amp; Body Works &mdash; currently is. National and retail-shopper sentiment have been softening through 2026; Azuna's target household hasn't shown the same erosion. That's a reason to lead with a premium price point and new-product launches rather than discounting defensively, though it's worth re-checking this gap periodically rather than assuming it holds indefinitely.</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Source: Morning Consult Daily Tracker (US), Index of Consumer Sentiment. National and audience-cut series reflect monthly aggregates, Oct 2025&ndash;Sept 2026. Azuna core-consumer proxy = US adults aged 18&ndash;44, household income $100k+, parents/guardians of children under 18. Retailer-shopper audiences = US adults reporting any usage frequency of that retailer. ICS is best interpreted as a within-audience change-over-time signal per Morning Consult methodology; cross-audience level comparisons should be read with that in mind.</p>
+    </footer>
+
+  </section>
+
+</div>
+
+<div id="tooltip"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============================================================
+     SHARED HELPERS
+     ============================================================ */
+  var tooltip = document.getElementById('tooltip');
+  function showTip(e, html){
+    tooltip.innerHTML = html;
+    tooltip.classList.add('show');
+    moveTip(e);
+  }
+  function moveTip(e){
+    tooltip.style.left = e.clientX + 'px';
+    tooltip.style.top = (e.clientY - 12) + 'px';
+  }
+  function hideTip(){ tooltip.classList.remove('show'); }
+  document.addEventListener('mousemove', function(e){
+    if (tooltip.classList.contains('show')) moveTip(e);
+  }, {passive:true});
+
+  function fmt(v, d){ d = d==null?1:d; return (v>=0?'+':'') + v.toFixed(d); }
+  function fmt1(v, d){ return v.toFixed(d==null?1:d); }
+  function ink(varName){ return getComputedStyle(document.body).getPropertyValue(varName).trim(); }
+
+  function buildLegend(el, items){
+    el.innerHTML = items.map(function(it){
+      return '<div class="legend-item"><span class="swatch'+(it.line?' line':'')+'" style="--c:'+it.color+'"></span>'+it.label+'</div>';
+    }).join('');
+  }
+
+  function wireHover(el, sel){
+    Array.prototype.forEach.call(el.querySelectorAll(sel), function(row){
+      row.addEventListener('mousemove', function(e){ showTip(e, '<b>'+row.dataset.label+'</b><br>'+row.dataset.value); });
+      row.addEventListener('mouseleave', hideTip);
+    });
+  }
+
+  /* ============================================================
+     RANKED BAR LIST (0-100 scale) — Retail Landscape
+     ============================================================ */
+  var CAT = {
+    mass:      { label:'Mass & Marketplace',        color:'var(--accent-mass)' },
+    specialty: { label:'Fragrance & Beauty Specialty', color:'var(--accent-specialty)' },
+    home:      { label:'Home & Décor',              color:'var(--accent-home)' }
+  };
+  var RETAILERS = [
+    { name:'Walmart',           pct:84.6, cat:'mass',      rep:76.5, fav:63.3 },
+    { name:'Amazon.com',        pct:82.0, cat:'mass' },
+    { name:'Target',            pct:67.1, cat:'mass',      rep:74.7, fav:55.3 },
+    { name:"Kohl's",            pct:51.5, cat:'mass' },
+    { name:'Bath & Body Works', pct:51.2, cat:'specialty', rep:77.7, fav:59.7 },
+    { name:'T.J. Maxx',         pct:47.7, cat:'home',      rep:76.8, fav:53.0 },
+    { name:'Marshalls',         pct:44.5, cat:'home' },
+    { name:'HomeGoods',         pct:35.8, cat:'home',      rep:76.5, fav:43.6 },
+    { name:'Ulta Beauty',       pct:33.2, cat:'specialty' },
+    { name:'Williams-Sonoma',   pct:16.8, cat:'home' }
+  ];
+  buildLegend(document.getElementById('landscape-legend'), [
+    {label:CAT.mass.label, color:CAT.mass.color},
+    {label:CAT.specialty.label, color:CAT.specialty.color},
+    {label:CAT.home.label, color:CAT.home.color}
+  ]);
+  (function(){
+    var el = document.getElementById('landscape-chart');
+    el.innerHTML = RETAILERS.map(function(r){
+      var w = r.pct.toFixed(2);
+      var c = CAT[r.cat].color;
+      var repLine = (r.rep!=null) ? ('<span class="rep">Rep '+fmt1(r.rep)+'</span>') : '';
+      return (
+        '<div class="bar-row" data-label="'+r.name+'" data-value="'+fmt1(r.pct)+'% usage'+(r.rep!=null? ' &middot; Reputation '+fmt1(r.rep)+' &middot; Net favorability +'+fmt1(r.fav):'')+'">'+
+          '<div class="bar-name">'+r.name+'</div>'+
+          '<div class="bar-track"><div class="bar-fill" style="width:'+w+'%; --c:'+c+'"></div></div>'+
+          '<div class="bar-val">'+fmt1(r.pct)+'%'+repLine+'</div>'+
+        '</div>'
+      );
+    }).join('');
+    wireHover(el, '.bar-row');
+  })();
+
+  /* ============================================================
+     MINI BAR CHART (fixed 0-100 scale)
+     ============================================================ */
+  function renderMini(elId, rows, color, unit){
+    unit = unit || '%';
+    var el = document.getElementById(elId);
+    el.innerHTML = rows.map(function(r){
+      var w = Math.max(r.value,0.5);
+      return (
+        '<div class="mini-row" data-label="'+r.label+'" data-value="'+fmt1(r.value)+unit+'">'+
+          '<div class="mini-label">'+r.label+'</div>'+
+          '<div class="mini-track"><div class="mini-fill" style="width:'+w+'%; --c:'+color+'"></div></div>'+
+          '<div class="mini-val">'+fmt1(r.value)+'</div>'+
+        '</div>'
+      );
+    }).join('');
+    wireHover(el, '.mini-row');
+  }
+  var TEAL = 'var(--accent-mass)', AMBER = 'var(--accent-specialty)', GREEN = 'var(--div-pos)';
+  renderMini('target-income', [
+    {label:'<$20k', value:54.27},{label:'$20–35k', value:61.74},{label:'$35–50k', value:67.21},
+    {label:'$50–75k', value:71.22},{label:'$75–100k', value:75.50},{label:'$100–150k', value:78.38},
+    {label:'$150–200k', value:80.52},{label:'$200–250k', value:81.82},{label:'$250k+', value:77.75}
+  ], TEAL);
+  renderMini('target-age', [
+    {label:'18–29', value:74.23},{label:'30–44', value:71.38},{label:'45–64', value:63.98},{label:'65+', value:60.35}
+  ], TEAL);
+  renderMini('target-gender', [
+    {label:'Women', value:66.32},{label:'Men', value:68.01}
+  ], TEAL);
+  renderMini('bbw-income', [
+    {label:'<$20k', value:47.11},{label:'$20–35k', value:49.14},{label:'$35–50k', value:51.67},
+    {label:'$50–75k', value:53.16},{label:'$75–100k', value:54.42},{label:'$100–150k', value:54.14},
+    {label:'$150–200k', value:56.03},{label:'$200–250k', value:54.26},{label:'$250k+', value:48.73}
+  ], AMBER);
+  renderMini('bbw-age', [
+    {label:'18–29', value:62.60},{label:'30–44', value:56.77},{label:'45–64', value:49.42},{label:'65+', value:37.18}
+  ], AMBER);
+  renderMini('bbw-gender', [
+    {label:'Women', value:60.33},{label:'Men', value:41.52}
+  ], AMBER);
+  renderMini('sustain-age', [
+    {label:'18–29', value:60.01},{label:'30–44', value:61.39},{label:'45–64', value:56.07},{label:'65+', value:52.47}
+  ], GREEN);
+  renderMini('sustain-income', [
+    {label:'<$20k', value:52.32},{label:'$20–35k', value:58.03},{label:'$35–50k', value:55.28},
+    {label:'$50–75k', value:55.69},{label:'$75–100k', value:60.84},{label:'$100–150k', value:63.21},
+    {label:'$150–200k', value:68.56},{label:'$200–250k', value:56.69},{label:'$250k+', value:69.80}
+  ], GREEN);
+
+  /* ============================================================
+     STAT COMPARE (Target vs BBW)
+     ============================================================ */
+  (function(){
+    var el = document.getElementById('stat-compare');
+    var stats = [
+      { label:'Usage frequency',    target:67.1, bbw:51.2 },
+      { label:'Net favorability',   target:55.3, bbw:59.7 },
+      { label:'Reputation Score',   target:74.7, bbw:77.7 }
+    ];
+    el.innerHTML = stats.map(function(s){
+      return (
+        '<div class="stat-row">'+
+          '<div class="stat-row-label">'+s.label+'</div>'+
+          '<div class="stat-pair">'+
+            '<div class="stat-line" data-label="Target — '+s.label+'" data-value="'+fmt1(s.target)+'"><div class="nm">Target</div><div class="stat-track"><div class="stat-fill" style="width:'+s.target+'%; --c:'+TEAL+'"></div></div><div class="vv">'+fmt1(s.target)+'</div></div>'+
+            '<div class="stat-line" data-label="Bath & Body Works — '+s.label+'" data-value="'+fmt1(s.bbw)+'"><div class="nm">B&amp;BW</div><div class="stat-track"><div class="stat-fill" style="width:'+s.bbw+'%; --c:'+AMBER+'"></div></div><div class="vv">'+fmt1(s.bbw)+'</div></div>'+
+          '</div>'+
+        '</div>'
+      );
+    }).join('');
+    wireHover(el, '.stat-line');
+  })();
+
+  /* ============================================================
+     DIVERGING LIKERT CHART (stacked, 5-point)
+     ============================================================ */
+  (function(){
+    buildLegend(document.getElementById('divergent-legend'), [
+      {label:'Strongly disagree / not important', color:'var(--div-neg)'},
+      {label:'Somewhat', color:'color-mix(in srgb, var(--div-neg) 55%, var(--surface))'},
+      {label:'Neutral', color:'var(--div-mid)'},
+      {label:'Somewhat', color:'color-mix(in srgb, var(--div-pos) 55%, var(--surface))'},
+      {label:'Strongly agree / important', color:'var(--div-pos)'}
+    ]);
+    var QUESTIONS = [
+      { q:'"I try to shop sustainably when possible" — all US adults', segs:[
+          {v:6.38, c:'var(--div-neg)', label:'Strongly disagree'},
+          {v:6.98, c:'color-mix(in srgb, var(--div-neg) 55%, var(--surface))', label:'Somewhat disagree'},
+          {v:29.79, c:'var(--div-mid)', label:'Neither agree nor disagree'},
+          {v:34.49, c:'color-mix(in srgb, var(--div-pos) 55%, var(--surface))', label:'Somewhat agree'},
+          {v:22.37, c:'var(--div-pos)', label:'Strongly agree'}
+      ]},
+      { q:'Importance of sustainability in beauty purchases — all US adults', segs:[
+          {v:25.84, c:'var(--div-neg)', label:'Not at all important'},
+          {v:16.94, c:'color-mix(in srgb, var(--div-neg) 55%, var(--surface))', label:'Slightly important'},
+          {v:26.13, c:'var(--div-mid)', label:'Moderately important'},
+          {v:17.90, c:'color-mix(in srgb, var(--div-pos) 55%, var(--surface))', label:'Very important'},
+          {v:13.19, c:'var(--div-pos)', label:'Extremely important'}
+      ]}
+    ];
+    var SCALE = 80;
+    var el = document.getElementById('divergent-chart');
+    var html = '';
+    QUESTIONS.forEach(function(item){
+      var segs = item.segs;
+      var neutral = segs[2].v, half = neutral/2;
+      var negNear = segs[1].v, negFar = segs[0].v;
+      var posNear = segs[3].v, posFar = segs[4].v;
+      var bounds = [
+        { from:-(half+negNear+negFar), to:-(half+negNear), c:segs[0].c, v:segs[0].v, label:segs[0].label },
+        { from:-(half+negNear),        to:-half,           c:segs[1].c, v:segs[1].v, label:segs[1].label },
+        { from:-half,                  to:half,            c:segs[2].c, v:segs[2].v, label:segs[2].label },
+        { from:half,                   to:half+posNear,    c:segs[3].c, v:segs[3].v, label:segs[3].label },
+        { from:half+posNear,           to:half+posNear+posFar, c:segs[4].c, v:segs[4].v, label:segs[4].label }
+      ];
+      html += '<div class="divergent-row"><p class="divergent-q">'+item.q+'</p><div class="divergent-track">';
+      bounds.forEach(function(b){
+        var leftPct = ((b.from + SCALE) / (SCALE*2)) * 100;
+        var widthPct = ((b.to - b.from) / (SCALE*2)) * 100;
+        html += '<div class="divergent-seg" data-label="'+b.label+'" data-value="'+fmt1(b.v)+'%" style="left:'+leftPct+'%; width:'+widthPct+'%; background:'+b.c+'">' +
+                (widthPct > 6 ? '<span>'+fmt1(b.v,0)+'%</span>' : '') + '</div>';
+      });
+      html += '<div class="divergent-center"></div></div>';
+      html += '<div class="divergent-axis"><span>← Disagree / not important</span><span>Agree / important →</span></div>';
+      html += '</div>';
+    });
+    el.innerHTML = html;
+    wireHover(el, '.divergent-seg');
+  })();
+
+  /* ============================================================
+     BRAND FUNNEL — health tiles
+     ============================================================ */
+  var azunaHealth = [
+    { label:'Awareness',              value:23.67, kind:'pct', n:619, hero:true },
+    { label:'Net Favorability',       value:0.44,  kind:'net', n:619 },
+    { label:'Net Purchasing Consid.', value:-1.62, kind:'net', n:619 },
+    { label:'Net Promoter Score',     value:-15.03,kind:'net', n:45, lowN:true },
+    { label:'Net Trust',              value:1.65,  kind:'net', n:619 },
+    { label:'Net Value',              value:-2.12, kind:'net', n:421 },
+    { label:'Net Buzz (2-wk)',        value:-0.19, kind:'net', n:619 }
+  ];
+  (function(){
+    var host = document.getElementById('health-tiles');
+    host.innerHTML = azunaHealth.map(function(it){
+      var cls = it.kind==='net' ? (it.value>0?'pos':(it.value<0?'neg':'')) : '';
+      var val = it.kind==='pct' ? fmt1(it.value)+'%' : fmt(it.value);
+      return '<div class="stat-tile'+(it.hero?' hero':'')+'">'+
+        '<div class="stat-label">'+it.label+'</div>'+
+        '<div class="stat-value '+cls+'">'+val+'</div>'+
+        '<div class="stat-n'+(it.lowN?' low':'')+'">n='+it.n+(it.lowN?' — small base':'')+'</div>'+
+      '</div>';
+    }).join('');
+  })();
+
+  /* ============================================================
+     BRAND FUNNEL — competitive set (signed horizontal bars)
+     ============================================================ */
+  var BRAND_COLOR = { 'Azuna':'var(--azuna)', 'Febreze':'var(--febreze)', 'Lysol':'var(--lysol)', 'Bath & Body Works':'var(--bbw)', "Mrs. Meyer's":'var(--mrsmeyers)' };
+  buildLegend(document.getElementById('brand-legend'), ['Azuna','Febreze','Lysol','Bath & Body Works',"Mrs. Meyer's"].map(function(b){ return {label:b, color:BRAND_COLOR[b]}; }));
+
+  var competitiveMetrics = [
+    { title:'Total Awareness', unit:'pct', rows:[
+        { brand:'Azuna', value:23.67, n:619 }, { brand:"Mrs. Meyer's", value:46.34, n:301 },
+        { brand:'Febreze', value:92.12, n:446 }, { brand:'Lysol', value:93.34, n:470 }, { brand:'Bath & Body Works', value:95.67, n:316 }
+    ]},
+    { title:'Net Favorability', unit:'net', rows:[
+        { brand:'Azuna', value:0.44, n:619 }, { brand:"Mrs. Meyer's", value:14.44, n:301 },
+        { brand:'Bath & Body Works', value:60.61, n:316 }, { brand:'Febreze', value:65.69, n:446 }, { brand:'Lysol', value:75.46, n:470 }
+    ]},
+    { title:'Net Promoter Score', unit:'net', rows:[
+        { brand:'Azuna', value:-15.03, n:45, lowN:true }, { brand:"Mrs. Meyer's", value:16.94, n:68 },
+        { brand:'Bath & Body Works', value:35.28, n:166 }, { brand:'Lysol', value:35.54, n:337 }, { brand:'Febreze', value:48.62, n:272 }
+    ]},
+    { title:'Net Purchasing Consideration', unit:'net', rows:[
+        { brand:'Azuna', value:-1.62, n:619 }, { brand:"Mrs. Meyer's", value:4.95, n:301 },
+        { brand:'Bath & Body Works', value:36.02, n:316 }, { brand:'Febreze', value:39.01, n:446 }, { brand:'Lysol', value:54.70, n:470 }
+    ]}
+  ];
+  function renderSignedBarBlock(host, metric){
+    var isNet = metric.unit === 'net';
+    var maxAbs = Math.max.apply(null, metric.rows.map(function(r){ return Math.abs(r.value); }));
+    var domainMax = isNet ? maxAbs*1.15 : 100;
+    var block = document.createElement('div');
+    block.className = 'sbar-block';
+    var title = document.createElement('div'); title.className = 'sbar-title'; title.textContent = metric.title;
+    block.appendChild(title);
+    metric.rows.forEach(function(r){
+      var row = document.createElement('div');
+      row.className = 'sbar-row';
+      row.dataset.label = r.brand;
+      row.dataset.value = (isNet?fmt(r.value):fmt1(r.value)+'%') + ' · n='+r.n+(r.lowN?' (small base)':'');
+      var track = isNet
+        ? (function(){
+            var pct = Math.abs(r.value)/domainMax*50;
+            var left = r.value >= 0 ? 50 : 50-pct;
+            var width = pct;
+            return '<div class="sbar-track"><div class="sbar-zero"></div><div class="sbar-fill" style="left:'+left+'%; width:'+width+'%; background:'+BRAND_COLOR[r.brand]+'; opacity:'+(r.lowN?0.55:1)+'"></div></div>';
+          })()
+        : '<div class="sbar-track"><div class="sbar-zero full"></div><div class="sbar-fill" style="left:0; width:'+(r.value/domainMax*100)+'%; background:'+BRAND_COLOR[r.brand]+'"></div></div>';
+      row.innerHTML = '<div class="sbar-label'+(r.brand==='Azuna'?' hero':'')+'">'+r.brand+'</div>'+track+'<div class="sbar-val">'+(isNet?fmt(r.value):fmt1(r.value)+'%')+(r.lowN?'*':'')+'</div>';
+      block.appendChild(row);
+    });
+    host.appendChild(block);
+    wireHover(block, '.sbar-row');
+  }
+  (function(){
+    var host = document.getElementById('competitive-bars');
+    host.style.display = 'grid';
+    host.style.gridTemplateColumns = 'repeat(2, minmax(0,1fr))';
+    host.style.gap = '8px 28px';
+    competitiveMetrics.forEach(function(m){ renderSignedBarBlock(host, m); });
+  })();
+
+  /* ============================================================
+     GENERIC MULTI-LINE TREND CHART (SVG)
+     ============================================================ */
+  function renderLineTrend(container, series, monthLabels, refPoint, opts){
+    opts = opts || {};
+    var W = 640, H = 230;
+    var padL = 42, padR = 16, padT = 14, padB = 26;
+    var chartW = W - padL - padR, chartH = H - padT - padB;
+    var n = monthLabels.length;
+
+    var allVals = [];
+    series.forEach(function(s){ allVals = allVals.concat(s.values); });
+    if (refPoint) allVals.push(refPoint.value);
+    var minV = Math.min.apply(null, allVals), maxV = Math.max.apply(null, allVals);
+    var pad = (maxV-minV)*0.12 || 5;
+    minV -= pad; maxV += pad;
+    if (opts.includeZero) minV = Math.min(minV, -2);
+
+    function xFor(i){ return padL + (i/(n-1))*chartW; }
+    function yFor(v){ return padT + chartH - (v-minV)/(maxV-minV)*chartH; }
+
+    var svgns = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(svgns,'svg');
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    svg.setAttribute('width','100%');
+    svg.style.overflow = 'visible';
+    container.appendChild(svg);
+
+    var ticks = 4;
+    for (var t=0;t<=ticks;t++){
+      var v = minV + (maxV-minV)*(t/ticks);
+      var y = yFor(v);
+      var line = document.createElementNS(svgns,'line');
+      line.setAttribute('x1',padL); line.setAttribute('x2',W-padR);
+      line.setAttribute('y1',y); line.setAttribute('y2',y);
+      line.setAttribute('class','lc-grid');
+      svg.appendChild(line);
+      var lab = document.createElementNS(svgns,'text');
+      lab.setAttribute('x',padL-6); lab.setAttribute('y',y+3);
+      lab.setAttribute('text-anchor','end'); lab.setAttribute('class','lc-axis');
+      lab.textContent = fmt1(v,0);
+      svg.appendChild(lab);
+    }
+    if (minV < 0 && maxV > 0){
+      var zy = yFor(0);
+      var zline = document.createElementNS(svgns,'line');
+      zline.setAttribute('x1',padL); zline.setAttribute('x2',W-padR);
+      zline.setAttribute('y1',zy); zline.setAttribute('y2',zy);
+      zline.setAttribute('class','lc-zero');
+      svg.appendChild(zline);
+    }
+    monthLabels.forEach(function(m,i){
+      if (i % 2 !== 0 && i !== n-1) return;
+      var lab = document.createElementNS(svgns,'text');
+      lab.setAttribute('x',xFor(i)); lab.setAttribute('y',H-6);
+      lab.setAttribute('text-anchor','middle'); lab.setAttribute('class','lc-axis');
+      lab.textContent = m;
+      svg.appendChild(lab);
+    });
+
+    var crosshair = document.createElementNS(svgns,'line');
+    crosshair.setAttribute('y1',padT); crosshair.setAttribute('y2',padT+chartH);
+    crosshair.setAttribute('stroke', ink('--ink-faint'));
+    crosshair.setAttribute('stroke-width','1');
+    crosshair.setAttribute('stroke-dasharray','3 3');
+    crosshair.style.opacity = 0;
+    svg.appendChild(crosshair);
+
+    series.forEach(function(s){
+      var color = ink(s.colorVar);
+      var d = s.values.map(function(v,i){ return (i===0?'M':'L')+xFor(i).toFixed(1)+','+yFor(v).toFixed(1); }).join(' ');
+      var path = document.createElementNS(svgns,'path');
+      path.setAttribute('d',d); path.setAttribute('fill','none');
+      path.setAttribute('stroke',color); path.setAttribute('stroke-width','2');
+      path.setAttribute('stroke-linecap','round'); path.setAttribute('stroke-linejoin','round');
+      svg.appendChild(path);
+      var c = document.createElementNS(svgns,'circle');
+      c.setAttribute('cx',xFor(n-1)); c.setAttribute('cy',yFor(s.values[n-1]));
+      c.setAttribute('r','3.5'); c.setAttribute('fill',color);
+      svg.appendChild(c);
+    });
+    if (refPoint){
+      var azColor = ink(refPoint.colorVar);
+      var rc = document.createElementNS(svgns,'circle');
+      rc.setAttribute('cx',xFor(n-1)); rc.setAttribute('cy',yFor(refPoint.value));
+      rc.setAttribute('r','5'); rc.setAttribute('fill',azColor);
+      rc.setAttribute('stroke', ink('--surface')); rc.setAttribute('stroke-width','2');
+      svg.appendChild(rc);
+    }
+
+    for (var i=0;i<n;i++){
+      (function(i){
+        var hit = document.createElementNS(svgns,'rect');
+        hit.setAttribute('x', xFor(i)-(chartW/n)/2); hit.setAttribute('y',padT);
+        hit.setAttribute('width', chartW/n); hit.setAttribute('height', chartH);
+        hit.setAttribute('fill','transparent');
+        hit.addEventListener('mousemove', function(e){
+          crosshair.setAttribute('x1',xFor(i)); crosshair.setAttribute('x2',xFor(i));
+          crosshair.style.opacity = 1;
+          var lines = series.map(function(s){
+            return '<span style="color:'+ink(s.colorVar)+'">●</span> '+s.label+': '+fmt1(s.values[i]);
+          });
+          if (i===n-1 && refPoint) lines.push('<span style="color:'+ink(refPoint.colorVar)+'">●</span> '+refPoint.label+': '+fmt1(refPoint.value)+' (single wave)');
+          showTip(e, '<b>'+monthLabels[i]+'</b><br>'+lines.join('<br>'));
+        });
+        hit.addEventListener('mouseleave', function(){ crosshair.style.opacity = 0; hideTip(); });
+        svg.appendChild(hit);
+      })(i);
+    }
+  }
+
+  /* ---- Brand Funnel trend ---- */
+  var FUNNEL_MONTHS = ['Sep \'25','Oct','Nov','Dec','Jan \'26','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep \'26'];
+  var favTrendSeries = [
+    { label:'Febreze', colorVar:'--febreze', values:[63.95,71.37,68.71,64.83,64.94,65.51,62.65,61.90,62.55,68.00,66.58,67.59,65.69] },
+    { label:'Lysol', colorVar:'--lysol', values:[71.42,68.36,69.95,67.38,65.40,68.54,67.70,68.68,65.02,68.02,62.81,73.17,75.46] },
+    { label:'Bath & Body Works', colorVar:'--bbw', values:[60.06,62.44,60.33,63.46,62.04,66.35,62.52,60.03,62.35,60.71,64.47,60.26,60.61] },
+    { label:"Mrs. Meyer's", colorVar:'--mrsmeyers', values:[20.72,20.96,17.06,19.27,21.11,18.32,19.97,17.64,21.64,17.60,22.10,21.05,14.44] }
+  ];
+  var pcTrendSeries = [
+    { label:'Febreze', colorVar:'--febreze', values:[45.29,45.78,41.45,48.13,47.78,38.36,41.64,44.35,41.32,40.95,44.76,48.13,39.01] },
+    { label:'Lysol', colorVar:'--lysol', values:[52.55,55.31,55.58,49.87,49.45,49.58,46.29,48.02,50.69,53.61,48.26,50.16,54.70] },
+    { label:'Bath & Body Works', colorVar:'--bbw', values:[34.36,32.91,34.29,36.68,30.38,26.65,32.16,29.60,32.70,25.74,28.45,25.05,36.02] },
+    { label:"Mrs. Meyer's", colorVar:'--mrsmeyers', values:[6.97,12.90,10.43,6.98,6.06,6.31,6.28,7.38,7.37,6.53,6.79,8.33,4.95] }
+  ];
+  buildLegend(document.getElementById('trend-legend'), [
+    {label:'Febreze', color:'var(--febreze)', line:true},{label:'Lysol', color:'var(--lysol)', line:true},
+    {label:'Bath & Body Works', color:'var(--bbw)', line:true},{label:"Mrs. Meyer's", color:'var(--mrsmeyers)', line:true},
+    {label:'Azuna (single wave, reference)', color:'var(--azuna)'}
+  ]);
+  renderLineTrend(document.getElementById('fav-trend'), favTrendSeries, FUNNEL_MONTHS, {label:'Azuna', colorVar:'--azuna', value:0.44});
+  renderLineTrend(document.getElementById('pc-trend'), pcTrendSeries, FUNNEL_MONTHS, {label:'Azuna', colorVar:'--azuna', value:-1.62}, {includeZero:true});
+
+  /* ============================================================
+     BRAND FUNNEL — discovery channels
+     ============================================================ */
+  var discoveryData = [
+    { label:'Search engines', value:65.62 },{ label:'Word of mouth (friends/family)', value:64.58 },
+    { label:'Video advertising', value:61.54 },{ label:'Digital advertising', value:56.94 },
+    { label:'Physical mail', value:44.86 },{ label:'Magazine stories (online)', value:41.25 },
+    { label:'Consumer review sites', value:39.29 },{ label:'Audio advertising', value:37.68 },
+    { label:'Influencer posts / reviews', value:37.14 },{ label:'Out-of-home advertising', value:37.02 },
+    { label:'Print advertising', value:34.64 },{ label:'Radio advertising', value:33.67 },
+    { label:'Print news articles', value:33.61 },{ label:'Celebrity/influencer endorsements', value:30.79 }
+  ];
+  (function(){
+    var el = document.getElementById('discovery-chart');
+    var topFour = discoveryData.slice(0,4).map(function(d){ return d.label; });
+    el.innerHTML = discoveryData.map(function(d){
+      var isTop = topFour.indexOf(d.label) >= 0;
+      return '<div class="bar-row" style="grid-template-columns:200px 1fr 70px" data-label="'+d.label+'" data-value="'+fmt1(d.value)+'% of US adults">'+
+        '<div class="bar-name" style="'+(isTop?'':'color:var(--ink-muted); font-weight:400;')+'">'+d.label+'</div>'+
+        '<div class="bar-track"><div class="bar-fill" style="width:'+(d.value/75*100)+'%; --c:'+(isTop?'var(--azuna)':'var(--line-strong)')+'"></div></div>'+
+        '<div class="bar-val">'+fmt1(d.value)+'%</div>'+
+      '</div>';
+    }).join('');
+    wireHover(el, '.bar-row');
+  })();
+
+  /* ============================================================
+     BRAND FUNNEL — targeting (signed diverging bars)
+     ============================================================ */
+  var ageData = [
+    { label:'18–34', fav:1.13, pc:2.73, n:175 },{ label:'35–44', fav:-2.39, pc:-5.22, n:124 },
+    { label:'45–54', fav:4.64, pc:0.78, n:76 },{ label:'55–64', fav:-0.37, pc:-4.18, n:91 },{ label:'65+', fav:0.37, pc:-3.35, n:152 }
+  ];
+  var incomeData = [
+    { label:'Under $20k', pc:-3.86, n:122 },{ label:'$20k–$35k', pc:-4.78, n:101 },{ label:'$35k–$50k', pc:3.93, n:86 },
+    { label:'$50k–$75k', pc:-1.67, n:112 },{ label:'$75k–$100k', pc:0.18, n:73 },{ label:'$100k–$150k', pc:-1.58, n:68 },
+    { label:'$150k–$200k', pc:5.15, n:29, lowN:true },{ label:'$200k–$250k', pc:0.00, n:18, lowN:true },{ label:'$250k+', pc:-26.66, n:9, lowN:true }
+  ];
+  function renderDivergingSimple(host, rows, valueKey, title){
+    var maxAbs = Math.max.apply(null, rows.map(function(r){ return Math.abs(r[valueKey]); }));
+    var block = document.createElement('div');
+    block.className = 'sbar-block';
+    var t = document.createElement('div'); t.className = 'sbar-title'; t.style.cssText='font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-family:"IBM Plex Mono",monospace;color:var(--ink-faint);font-weight:500;'; t.textContent = title;
+    block.appendChild(t);
+    rows.forEach(function(r){
+      var v = r[valueKey];
+      var pct = Math.abs(v)/(maxAbs*1.15)*50;
+      var left = v>=0 ? 50 : 50-pct;
+      var color = v>=0 ? 'var(--div-pos)' : 'var(--div-neg)';
+      var row = document.createElement('div');
+      row.className = 'sbar-row';
+      row.dataset.label = r.label;
+      row.dataset.value = title+': '+fmt(v)+' · n='+r.n+(r.lowN?' (small base)':'');
+      row.innerHTML = '<div class="sbar-label" style="width:92px">'+r.label+'</div>'+
+        '<div class="sbar-track"><div class="sbar-zero"></div><div class="sbar-fill" style="left:'+left+'%; width:'+pct+'%; background:'+color+'; opacity:'+(r.lowN?0.5:1)+'"></div></div>'+
+        '<div class="sbar-val">'+fmt(v)+(r.lowN?'*':'')+'</div>';
+      block.appendChild(row);
+    });
+    host.appendChild(block);
+    wireHover(block, '.sbar-row');
+  }
+  (function(){
+    var ageHost = document.getElementById('age-chart');
+    renderDivergingSimple(ageHost, ageData, 'fav', 'Net Favorability');
+    renderDivergingSimple(ageHost, ageData, 'pc', 'Net Purchasing Consideration');
+    var incomeHost = document.getElementById('income-chart');
+    renderDivergingSimple(incomeHost, incomeData, 'pc', 'Net Purchasing Consideration');
+  })();
+
+  /* ============================================================
+     CORE CONSUMER — spending cards
+     ============================================================ */
+  var spendData = [
+    { title:'Total household spending', value:7858, compareLabel:'All households', compareValue:3601,
+      deltas:[{v:31,l:'Oct to Aug'},{v:2,l:'Jan to Aug'},{v:-5.1,l:'Jul to Aug'}] },
+    { title:'Groceries', value:677, compareLabel:'No comparison group available', compareValue:null,
+      deltas:[{v:72,l:'Oct to Aug'},{v:-1,l:'Jan to Aug'},{v:-6.1,l:'Jul to Aug'}] },
+    { title:'Home furnishings', value:199, compareLabel:'All adults 18+', compareValue:69,
+      deltas:[{v:136,l:'Oct to Aug'},{v:22,l:'Jan to Aug'},{v:-7.5,l:'Jul to Aug'}] },
+    { title:'Personal care products', value:106, compareLabel:'All households', compareValue:47,
+      deltas:[{v:150,l:'Oct to Aug'},{v:5,l:'Jan to Aug'},{v:-3.7,l:'Jul to Aug'}] }
+  ];
+  (function(){
+    var host = document.getElementById('spend-cards');
+    host.innerHTML = spendData.map(function(c){
+      var compareHtml = c.compareValue!=null
+        ? '<div class="spend-compare">Aug 2026 avg./mo. '+c.compareLabel+': $'+c.compareValue.toLocaleString()+'</div>'
+        : '<div class="spend-compare">Aug 2026 avg./mo. '+c.compareLabel+'</div>';
+      var barHtml = c.compareValue!=null
+        ? '<div class="spend-bar-compare"><div class="stat-line" style="grid-template-columns:70px 1fr 64px"><div class="nm">Azuna</div><div class="stat-track"><div class="stat-fill" style="width:100%; --c:var(--azuna)"></div></div><div class="vv">$'+c.value.toLocaleString()+'</div></div>'+
+          '<div class="stat-line" style="grid-template-columns:70px 1fr 64px; margin-top:4px"><div class="nm">'+c.compareLabel+'</div><div class="stat-track"><div class="stat-fill" style="width:'+(c.compareValue/c.value*100)+'%; --c:var(--line-strong)"></div></div><div class="vv">$'+c.compareValue.toLocaleString()+'</div></div></div>'
+        : '';
+      return '<div class="spend-card">'+
+        '<div class="spend-card-title">'+c.title+'</div>'+
+        '<div class="spend-figures"><div><div class="spend-value">$'+c.value.toLocaleString()+'</div>'+compareHtml+'</div></div>'+
+        barHtml+
+        '<div class="spend-deltas" style="margin-top:12px">'+c.deltas.map(function(d){
+          var cls = d.v>0?'pos':(d.v<0?'neg':'');
+          return '<div class="spend-delta"><div class="dv '+cls+'">'+fmt(d.v,1)+'%</div><div class="dl">'+d.l+'</div></div>';
+        }).join('')+'</div>'+
+      '</div>';
+    }).join('');
+  })();
+
+  /* ============================================================
+     ECONOMIC SENTIMENT — ICS trends
+     ============================================================ */
+  var ICS_MONTHS = ['Oct \'25','Nov','Dec','Jan \'26','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep \'26'];
+  var NATIONAL_ICS = [93.82,92.77,96.49,94.85,94.17,90.74,89.23,87.80,89.27,90.49,90.00,87.64];
+  var AZUNA_ICS    = [145.12,143.09,148.07,135.95,132.39,133.31,134.33,135.52,135.65,136.01,138.35,135.57];
+  var TARGET_ICS   = [97.06,97.35,100.63,96.75,96.28,95.23,90.96,91.42,93.26,92.91,92.34,89.66];
+  var WALMART_ICS  = [97,90.83,98.32,95.4,94.4,93.29,91.74,89.51,89.43,93.54,91.15,88.52];
+  var BBW_ICS      = [94.33,100.16,103.54,101.83,99.93,85.98,90.83,95.56,97.3,96.55,99.69,94.57];
+
+  buildLegend(document.getElementById('ics-azuna-legend'), [
+    {label:'Azuna core-consumer proxy', color:'var(--azuna)', line:true},
+    {label:'National', color:'var(--ink-faint)', line:true}
+  ]);
+  renderLineTrend(document.getElementById('ics-azuna-trend'), [
+    { label:'Azuna core-consumer proxy', colorVar:'--azuna', values:AZUNA_ICS },
+    { label:'National', colorVar:'--ink-faint', values:NATIONAL_ICS }
+  ], ICS_MONTHS, null);
+
+  buildLegend(document.getElementById('ics-retail-legend'), [
+    {label:'National', color:'var(--ink-faint)', line:true},
+    {label:'Target shoppers', color:'var(--accent-mass)', line:true},
+    {label:'Walmart shoppers', color:'var(--azuna)', line:true},
+    {label:'Bath & Body Works shoppers', color:'var(--accent-specialty)', line:true}
+  ]);
+  renderLineTrend(document.getElementById('ics-retail-trend'), [
+    { label:'National', colorVar:'--ink-faint', values:NATIONAL_ICS },
+    { label:'Target shoppers', colorVar:'--accent-mass', values:TARGET_ICS },
+    { label:'Walmart shoppers', colorVar:'--azuna', values:WALMART_ICS },
+    { label:'Bath & Body Works shoppers', colorVar:'--accent-specialty', values:BBW_ICS }
+  ], ICS_MONTHS, null);
+
+  /* ---- ICS snapshot (latest month bar comparison) ---- */
+  (function(){
+    var rows = [
+      { label:'Azuna core-consumer proxy', value:AZUNA_ICS[AZUNA_ICS.length-1], color:'var(--azuna)' },
+      { label:'Bath & Body Works shoppers', value:BBW_ICS[BBW_ICS.length-1], color:'var(--accent-specialty)' },
+      { label:'Target shoppers', value:TARGET_ICS[TARGET_ICS.length-1], color:'var(--accent-mass)' },
+      { label:'Walmart shoppers', value:WALMART_ICS[WALMART_ICS.length-1], color:'var(--accent-home)' },
+      { label:'National', value:NATIONAL_ICS[NATIONAL_ICS.length-1], color:'var(--ink-faint)' }
+    ];
+    var max = Math.max.apply(null, rows.map(function(r){ return r.value; }));
+    var el = document.getElementById('ics-snapshot');
+    el.innerHTML = '<div class="bar-list">' + rows.map(function(r){
+      return '<div class="bar-row" style="grid-template-columns:190px 1fr 70px" data-label="'+r.label+'" data-value="ICS '+fmt1(r.value)+' (Sept 2026)">'+
+        '<div class="bar-name">'+r.label+'</div>'+
+        '<div class="bar-track"><div class="bar-fill" style="width:'+(r.value/max*100)+'%; --c:'+r.color+'"></div></div>'+
+        '<div class="bar-val">'+fmt1(r.value)+'</div>'+
+      '</div>';
+    }).join('') + '</div>';
+    wireHover(el, '.bar-row');
+  })();
+
+  /* ============================================================
+     TAB SWITCHING
+     ============================================================ */
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  var tabPanels = {
+    funnel: document.getElementById('tab-funnel'),
+    retail: document.getElementById('tab-retail'),
+    consumer: document.getElementById('tab-consumer'),
+    economic: document.getElementById('tab-economic')
+  };
+  Array.prototype.forEach.call(tabBtns, function(btn){
+    btn.addEventListener('click', function(){
+      Array.prototype.forEach.call(tabBtns, function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      Object.keys(tabPanels).forEach(function(k){ tabPanels[k].classList.remove('active'); });
+      tabPanels[btn.dataset.tab].classList.add('active');
+      window.scrollTo({top:0, behavior:'instant'});
+    });
+  });
+
+})();
+</script>
+
+</body>
+</html>
